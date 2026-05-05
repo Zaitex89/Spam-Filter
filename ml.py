@@ -2,6 +2,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
+import pickle
 
 def run_ml(X, y):
 
@@ -38,3 +39,11 @@ def run_ml(X, y):
     nb = MultinomialNB()
     nb.fit(X_train, y_train)
     utvärdera("NAIVE BAYES", y_test, nb.predict(X_test))
+
+
+
+    # ── Spara bästa modellen ───────────────────────────────────
+    with open("modell.pkl", "wb") as f:
+        pickle.dump(lr, f)
+
+    print("\nModell sparad som modell.pkl")

@@ -2,6 +2,7 @@ import pandas as pd
 import kagglehub
 import os
 from eda import run_eda
+from ml import run_ml
 
 # Ladda data
 path = kagglehub.dataset_download("balaka18/email-spam-classification-dataset-csv")
@@ -29,3 +30,4 @@ df['total_words'] = X.sum(axis=1)
 run_eda(X, y, df)
 
 # Kör ML
+run_ml(X, y)

@@ -1,25 +1,23 @@
-import kagglehub
 import pandas as pd
+import numpy as np
+import kagglehub
 import os
 
-# Ladda ner dataset
-path = kagglehub.dataset_download("wcukierski/enron-email-dataset")
-print("Path to dataset files:", path)
+path = kagglehub.dataset_download("balaka18/email-spam-classification-dataset-csv")
+df = pd.read_csv(os.path.join(path, "emails.csv"))
+df = df.rename(columns={'Prediction': 'label'})
 
-# ── Kolla vad som finns i mappen ──────────────────────────
-print("\nFiler i mappen:")
-for f in os.listdir(path):
-    size_mb = os.path.getsize(os.path.join(path, f)) / 1024 / 1024
-    print(f"  {f}  ({size_mb:.1f} MB)")
+X = df.drop(columns=['Email No.', 'label'])
+y = df['label']
 
-# ── Läs in CSV ────────────────────────────────────────────
-csv_path = os.path.join(path, "emails.csv")
-df = pd.read_csv(csv_path)
+df['total_words'] = X.sum(axis=1)
+df['unika_ord']   = (X > 0).sum(axis=1)
 
-# ── Grundläggande kontroll ────────────────────────────────
-print("\nAntal rader och kolumner:", df.shape)
-print("\nKolumnnamn:", df.columns.tolist())
-print("\nFörsta raden - file-kolumn:")
-print(df['file'].iloc[0])
-print("\nFörsta raden - message-kolumn (första 500 tecken):")
-print(df['message'].iloc[0][:500])
+# 1. GRUNDLÄGGANDE INFO
+print("=" * 50)
+print("DATASET ÖVERSIKT")
+print("=" * 50)
+print(f"Totalt antal mail:     {len(df)}")
+print(f"Antal ord-features:    {X.shape[1]}")
+print(f"Saknade värden:        {df.isnull().sum().sum()}")
+print(f"Duplicerade rader:     {df.duplicated().sum()}")

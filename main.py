@@ -25,10 +25,16 @@ X = X[[col for col in X.columns if col not in stoppord]]
 
 df['total_words'] = X.sum(axis=1)
 
-# Hjälpfunktion för att printa ord-listor
+
+# ── Hjälpfunktion för vanliga ord ─────────────────────────
 def print_ord(serie):
     for ord, freq in zip(serie.index.tolist(), serie.values.tolist()):
-        print(f"  {str(ord)} - {str(int(freq) if freq > 1 else round(freq, 1))}")
+        print(f"  {str(ord)} - {str(int(freq))} gånger")
+
+# ── Hjälpfunktion för ratio-ord ───────────────────────────
+def print_ratio(serie, typ):
+    for ord, val in zip(serie.index.tolist(), serie.values.tolist()):
+        print(f"  {str(ord)} - {str(round(val, 1))}x vanligare i {typ}")
 
 
 print("=" * 50)
@@ -71,9 +77,9 @@ ham_freq  = X[y==0].mean()
 print("\n" + "=" * 50)
 print("ORD SOM STARKAST INDIKERAR SPAM")
 print("=" * 50)
-print_ord((spam_freq / (ham_freq + 0.0001)).sort_values(ascending=False).head(15))
+print_ratio((spam_freq / (ham_freq + 0.0001)).sort_values(ascending=False).head(15), "spam")
 
 print("\n" + "=" * 50)
 print("ORD SOM STARKAST INDIKERAR ÄKTA MAIL")
 print("=" * 50)
-print_ord((ham_freq / (spam_freq + 0.0001)).sort_values(ascending=False).head(15))
+print_ratio((ham_freq / (spam_freq + 0.0001)).sort_values(ascending=False).head(15), "äkta mail")

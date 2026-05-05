@@ -4,7 +4,7 @@ import os
 from eda import run_eda
 from ml import run_ml
 
-# Ladda data
+# Load Data
 path = kagglehub.dataset_download("balaka18/email-spam-classification-dataset-csv")
 df   = pd.read_csv(os.path.join(path, "emails.csv"))
 df   = df.rename(columns={'Prediction': 'label'})
@@ -12,7 +12,7 @@ df   = df.rename(columns={'Prediction': 'label'})
 X = df.drop(columns=['Email No.', 'label'])
 y = df['label']
 
-# Rensa features
+# Delete features
 X = X[[col for col in X.columns if len(col) >= 4]]
 
 stoppord = [
@@ -26,8 +26,6 @@ X = X[[col for col in X.columns if col not in stoppord]]
 
 df['total_words'] = X.sum(axis=1)
 
-# Kör EDA
 run_eda(X, y, df)
 
-# Kör ML
 run_ml(X, y)

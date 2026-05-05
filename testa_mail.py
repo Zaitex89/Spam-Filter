@@ -3,11 +3,11 @@ import pandas as pd
 import kagglehub
 import os
 
-# ── Ladda modellen ─────────────────────────────────────────
+# Load model
 with open("modell.pkl", "rb") as f:
     modell = pickle.load(f)
 
-# ── Ladda kolumnnamnen (samma som träningen) ───────────────
+# Load column name (same as training)
 path = kagglehub.dataset_download("balaka18/email-spam-classification-dataset-csv")
 df   = pd.read_csv(os.path.join(path, "emails.csv"))
 df   = df.rename(columns={'Prediction': 'label'})
@@ -25,9 +25,9 @@ stoppord = [
 X = X[[col for col in X.columns if col not in stoppord]]
 kolumner = X.columns.tolist()
 
-# Funktion för att testa ett mail
+# Functions to test a mail
 def testa_mail(text):
-    # Räkna hur många gånger varje ord finns i texten
+    # Count how many times every word is caught in the text
     ord_i_mail = text.lower().split()
     rad = {}
     for col in kolumner:
@@ -44,7 +44,7 @@ def testa_mail(text):
     print(f"  Resultat:    {'SKRÄPPOST' if prediction == 1 else 'ÄKTA MAIL'}")
     print(f"  Säkerhet:    {max(sannolikhet)*100:.1f}%")
 
-#Testa egna mail
+# Test own emails
 testa_mail("Free money! Click here now to claim your prize and win cash!")
 testa_mail("Hi, can we schedule a meeting tomorrow to discuss the deal?")
 testa_mail("Congratulations you have won a free iPhone click here now")

@@ -9,14 +9,14 @@ import pickle
 
 def run_ml(X, y):
 
-    # ── Dela upp data ──────────────────────────────────────
+    # Split data
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42
     )
     print(f"Träningsdata:  {X_train.shape[0]} mail")
     print(f"Testdata:      {X_test.shape[0]} mail")
 
-    # ── Hjälpfunktion ──────────────────────────────────────
+    # Help function
     def utvärdera(namn, y_test, y_pred):
         print("\n" + "=" * 50)
         print(namn)
@@ -32,23 +32,23 @@ def run_ml(X, y):
         print(f"  Missad spam:          {cm[1][0]}")
         print(f"  Rätt spam:            {cm[1][1]}")
 
-    # ── Logistisk Regression ──────────────────────────────
+    # Logistisk Regression
     lr = LogisticRegression(max_iter=1000, random_state=42)
     lr.fit(X_train, y_train)
     utvärdera("LOGISTISK REGRESSION", y_test, lr.predict(X_test))
 
-    # ── Naive Bayes ───────────────────────────────────────
+    # Naive Bayes
     nb = MultinomialNB()
     nb.fit(X_train, y_train)
     utvärdera("NAIVE BAYES", y_test, nb.predict(X_test))
 
-    # ── Random Forest ─────────────────────────────────────
+    # Random Forest
     rf = RandomForestClassifier(n_estimators=100, random_state=42)
     rf.fit(X_train, y_train)
     utvärdera("RANDOM FOREST", y_test, rf.predict(X_test))
 
-    # ── KNN + PCA ─────────────────────────────────────────
-    # PCA minskar från 2565 features till 50 dimensioner
+    # KNN + PCA
+    # PCA reduces from 2565 features to 50 dimensions
     pca = PCA(n_components=50, random_state=42)
     X_train_pca = pca.fit_transform(X_train)
     X_test_pca  = pca.transform(X_test)
@@ -57,7 +57,7 @@ def run_ml(X, y):
     knn.fit(X_train_pca, y_train)
     utvärdera("KNN + PCA (50 komponenter)", y_test, knn.predict(X_test_pca))
 
-    # ── Spara bästa modellen ──────────────────────────────
+    # Saves best model
     with open("modell.pkl", "wb") as f:
         pickle.dump(lr, f)
     print("\nModell sparad som modell.pkl")

@@ -13,13 +13,13 @@ def run_ml(X, y):
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42
     )
-    print(f"Träningsdata:  {X_train.shape[0]} mail")
-    print(f"Testdata:      {X_test.shape[0]} mail")
+    print(f"Training data:  {X_train.shape[0]} emails")
+    print(f"Test data:      {X_test.shape[0]} emails")
 
     # Help function
-    def utvärdera(namn, y_test, y_pred):
+    def evaluate(name, y_test, y_pred):
         print("\n" + "=" * 50)
-        print(namn)
+        print(name)
         print("=" * 50)
         print(f"  Accuracy:   {accuracy_score(y_test, y_pred)*100:.1f}%")
         print(f"  Precision:  {precision_score(y_test, y_pred)*100:.1f}%")
@@ -27,25 +27,25 @@ def run_ml(X, y):
         print(f"  F1-score:   {f1_score(y_test, y_pred)*100:.1f}%")
         cm = confusion_matrix(y_test, y_pred)
         print(f"\n  Confusion matrix:")
-        print(f"  Rätt äkta mail:       {cm[0][0]}")
-        print(f"  Fel klassad som spam: {cm[0][1]}")
-        print(f"  Missad spam:          {cm[1][0]}")
-        print(f"  Rätt spam:            {cm[1][1]}")
+        print(f"  Correct legitimate:   {cm[0][0]}")
+        print(f"  Legitimate as spam:   {cm[0][1]}")
+        print(f"  Missed spam:          {cm[1][0]}")
+        print(f"  Correct spam:         {cm[1][1]}")
 
-    # Logistisk Regression
+    # Logistic Regression
     lr = LogisticRegression(max_iter=1000, random_state=42)
     lr.fit(X_train, y_train)
-    utvärdera("LOGISTISK REGRESSION", y_test, lr.predict(X_test))
+    evaluate("LOGISTIC REGRESSION", y_test, lr.predict(X_test))
 
     # Naive Bayes
     nb = MultinomialNB()
     nb.fit(X_train, y_train)
-    utvärdera("NAIVE BAYES", y_test, nb.predict(X_test))
+    evaluate("NAIVE BAYES", y_test, nb.predict(X_test))
 
     # Random Forest
     rf = RandomForestClassifier(n_estimators=100, random_state=42)
     rf.fit(X_train, y_train)
-    utvärdera("RANDOM FOREST", y_test, rf.predict(X_test))
+    evaluate("RANDOM FOREST", y_test, rf.predict(X_test))
 
     # KNN + PCA
     # PCA reduces from 2565 features to 50 dimensions
@@ -55,9 +55,9 @@ def run_ml(X, y):
 
     knn = KNeighborsClassifier(n_neighbors=5)
     knn.fit(X_train_pca, y_train)
-    utvärdera("KNN + PCA (50 komponenter)", y_test, knn.predict(X_test_pca))
+    evaluate("KNN + PCA (50 components)", y_test, knn.predict(X_test_pca))
 
     # Saves best model
     with open("modell.pkl", "wb") as f:
         pickle.dump(lr, f)
-    print("\nModell sparad som modell.pkl")
+    print("\nModel saved as modell.pkl")

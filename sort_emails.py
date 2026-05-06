@@ -60,3 +60,49 @@ print(f"\n SPAM ({len(spam)})")
 print("-" * 50)
 for email, score in spam:
     print(f"  [{score:.0f}% spam score]  {email[:55]}...")
+
+def test_email_interactive(threshold=0.75):
+    print("\n" + "="*75)
+    print("🚀 INTERACTIVE SPAM FILTER")
+    print("="*75)
+    print("Type an email below and press Enter to analyze it.")
+    print("Type 'exit' or 'quit' to stop.\n")
+
+    while True:
+        try:
+            text = input("📧 Your email: ").strip()
+            
+            if text.lower() in ['exit', 'quit', 'q']:
+                print("👋 Exiting spam filter. Have a great day!")
+                break
+                
+            if not text:
+                print("⚠️  Please write an email...")
+                continue
+
+            # Prepare bag-of-words
+            words = text.lower().split()
+            row = {col: words.count(col) for col in columns}
+            mail_df = pd.DataFrame([row])
+
+            # Make prediction
+            probability = model.predict_proba(mail_df)[0][1]   # Probability of being SPAM
+            prediction = 1 if probability >= threshold else 0
+
+            # Show result
+            print("-" * 70)
+            if prediction == 1:
+                print(f"🔴 SPAM DETECTED! ({probability*100:.1f}% spam probability)")
+            else:
+                print(f"✅ LEGITIMATE EMAIL ({probability*100:.1f}% spam probability)")
+            print("-" * 70)
+            print(f"Message: {text[:150]}{'...' if len(text) > 150 else ''}\n")
+
+        except KeyboardInterrupt:
+            print("\n\n👋 Exiting...")
+            break
+        except Exception as e:
+            print(f"Error: {e}")
+
+if __name__ == "__main__":
+    test_email_interactive(threshold=0.75)   # Change default threshold here if you want

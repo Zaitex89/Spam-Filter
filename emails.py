@@ -1,5 +1,5 @@
 # Spam emails
-SPAM_EMAILS = [
+INBOX = [
     "Free money! Click here now to claim your prize and win cash!",
     "Congratulations you have won a free iPhone click here now",
     "Buy cheap viagra online free pills discount pharmacy drugs",
@@ -10,10 +10,6 @@ SPAM_EMAILS = [
     "Hot singles in your area click here free dating site now",
     "Cheap software photoshop microsoft windows discount online",
     "Nigerian prince needs your help transfer money bank account",
-]
-
-# Legitimate emails
-LEGITIMATE_EMAILS = [
     "Hi, can we schedule a meeting tomorrow to discuss the deal?",
     "Please find attached the report from the Enron meeting today",
     "The gas volume for this month needs to be confirmed by Friday",

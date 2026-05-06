@@ -2,12 +2,13 @@ import pickle
 import pandas as pd
 import kagglehub
 import os
+from emails import SPAM_EMAILS, LEGITIMATE_EMAILS
 
 # Load model
 with open("modell.pkl", "rb") as f:
     model = pickle.load(f)
 
-# Load column name (same as training)
+# Load column names (same as training)
 path = kagglehub.dataset_download("balaka18/email-spam-classification-dataset-csv")
 df   = pd.read_csv(os.path.join(path, "emails.csv"))
 df   = df.rename(columns={'Prediction': 'label'})
@@ -25,27 +26,40 @@ stoppord = [
 X = X[[col for col in X.columns if col not in stoppord]]
 columns = X.columns.tolist()
 
-# Functions to test a mail
-def test_email(text):
+# Function to test a mail
+def test_email(text, threshold=0.8):
     # Count how many times every word is caught in the text
     words_in_email = text.lower().split()
-    row = {}
-    for col in columns:
-        row[col] = words_in_email.count(col)
+    row = {col: words_in_email.count(col) for col in columns}
 
-    mail_df = pd.DataFrame([row])
-    prediction = model.predict(mail_df)[0]
+    mail_df     = pd.DataFrame([row])
     probability = model.predict_proba(mail_df)[0]
+    prediction  = 1 if probability[1] >= threshold else 0
 
-    print("\n" + "=" * 50)
-    print("EMAIL ANALYSIS")
-    print("=" * 50)
-    print(f"  Text:        {text[:60]}...")
-    print(f"  Result:      {'SPAM' if prediction == 1 else 'LEGITIMATE'}")
-    print(f"  Confidence:  {max(probability)*100:.1f}%")
+    return {
+        'result':     'SPAM' if prediction == 1 else 'LEGITIMATE',
+        'spam_score': probability[1] * 100,
+        'correct':    None
+    }
 
-# Test own emails
-test_email("Free money! Click here now to claim your prize and win cash!")
-test_email("Hi, can we schedule a meeting tomorrow to discuss the deal?")
-test_email("Congratulations you have won a free iPhone click here now")
-test_email("Please find attached the report from the Enron meeting today")
+# Run tests and print summary
+def run_tests(emails, expected_label):
+    correct = 0
+    for email in emails:
+        result = test_email(email)
+        if result['result'] == expected_label:
+            correct += 1
+
+    print(f"  Correct:      {correct}/{len(emails)}")
+    print(f"  Wrong:        {len(emails) - correct}/{len(emails)}")
+    print(f"  Accuracy:     {correct/len(emails)*100:.0f}%")
+
+print("=" * 50)
+print("SPAM EMAIL RESULTS")
+print("=" * 50)
+run_tests(SPAM_EMAILS, "SPAM")
+
+print("\n" + "=" * 50)
+print("LEGITIMATE EMAIL RESULTS")
+print("=" * 50)
+run_tests(LEGITIMATE_EMAILS, "LEGITIMATE")

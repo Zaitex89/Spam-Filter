@@ -1,0 +1,27 @@
+# Spam emails
+SPAM_EMAILS = [
+    "Free money! Click here now to claim your prize and win cash!",
+    "Congratulations you have won a free iPhone click here now",
+    "Buy cheap viagra online free pills discount pharmacy drugs",
+    "URGENT you have won a lottery prize claim your money now",
+    "Make money fast invest now stocks guaranteed returns click",
+    "Free weight loss pills order now discount medication online",
+    "You are selected for a special offer click here to claim",
+    "Hot singles in your area click here free dating site now",
+    "Cheap software photoshop microsoft windows discount online",
+    "Nigerian prince needs your help transfer money bank account",
+]
+
+# Legitimate emails
+LEGITIMATE_EMAILS = [
+    "Hi, can we schedule a meeting tomorrow to discuss the deal?",
+    "Please find attached the report from the Enron meeting today",
+    "The gas volume for this month needs to be confirmed by Friday",
+    "Can you review the contract and send feedback before Thursday?",
+    "I wanted to follow up on the lease agreement we discussed",
+    "Please forward the meter readings to the team before noon",
+    "The quarterly report is attached please review and respond",
+    "We need to reschedule the meeting due to a conflict tomorrow",
+    "Could you send me the updated spreadsheet for the project?",
+    "Thanks for your help with the Enron energy deal last week",
+]

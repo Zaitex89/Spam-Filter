@@ -10,7 +10,7 @@ The model classifies emails as spam or legitimate using Logistic Regression.
 1. Clone the repository
 2. Create a virtual environment and install dependencies:
 
-pip install -r requirements
+pip install -r requirements.txt
 
 ---
 

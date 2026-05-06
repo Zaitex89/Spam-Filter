@@ -1,4 +1,3 @@
-# Spam emails
 INBOX = [
     "Free money! Click here now to claim your prize and win cash!",
     "Congratulations you have won a free iPhone click here now",
@@ -20,4 +19,7 @@ INBOX = [
     "We need to reschedule the meeting due to a conflict tomorrow",
     "Could you send me the updated spreadsheet for the project?",
     "Thanks for your help with the Enron energy deal last week",
+    "testing email, click to claim here",
+    "click to claim free gold for wow",
+    "stop",
 ]

@@ -2,6 +2,7 @@ import pickle
 import pandas as pd
 import kagglehub
 import os
+import emails as emails_module
 from emails import INBOX
 
 # Load model
@@ -25,6 +26,19 @@ stoppord = [
 ]
 X = X[[col for col in X.columns if col not in stoppord]]
 columns = X.columns.tolist()
+
+# Save email to emails.py
+def save_to_inbox(text):
+    emails_module.INBOX.append(text)
+    filepath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "emails.py")
+    with open(filepath, "w") as f:
+        f.write("INBOX = [\n")
+        for email in emails_module.INBOX:
+            clean = email.replace('"', '\\"')
+            f.write(f'    "{clean}",\n')
+        f.write("]\n")
+    print(f"Saved! emails.py now has {len(emails_module.INBOX)} emails")
+    print(f"File location: {filepath}")
 
 # Sort emails
 def sort_inbox(emails, threshold=0.8):
@@ -61,48 +75,49 @@ print("-" * 50)
 for email, score in spam:
     print(f"  [{score:.0f}% spam score]  {email[:55]}...")
 
-def test_email_interactive(threshold=0.75):
-    print("\n" + "="*75)
-    print("🚀 INTERACTIVE SPAM FILTER")
-    print("="*75)
+def test_email_interactive(threshold=0.8):
+    print("\n" + "=" * 75)
+    print("INTERACTIVE SPAM FILTER")
+    print("=" * 75)
     print("Type an email below and press Enter to analyze it.")
     print("Type 'exit' or 'quit' to stop.\n")
 
     while True:
         try:
-            text = input("📧 Your email: ").strip()
-            
+            text = input("Your email: ").strip()
+
             if text.lower() in ['exit', 'quit', 'q']:
-                print("👋 Exiting spam filter. Have a great day!")
+                print("Exiting spam filter. Have a great day!")
                 break
-                
+
             if not text:
-                print("⚠️  Please write an email...")
+                print("Please write an email...")
                 continue
 
             # Prepare bag-of-words
-            words = text.lower().split()
-            row = {col: words.count(col) for col in columns}
-            mail_df = pd.DataFrame([row])
-
-            # Make prediction
-            probability = model.predict_proba(mail_df)[0][1]   # Probability of being SPAM
-            prediction = 1 if probability >= threshold else 0
+            words       = text.lower().split()
+            row         = {col: words.count(col) for col in columns}
+            mail_df     = pd.DataFrame([row])
+            probability = model.predict_proba(mail_df)[0][1]
+            prediction  = 1 if probability >= threshold else 0
 
             # Show result
             print("-" * 70)
             if prediction == 1:
-                print(f"🔴 SPAM DETECTED! ({probability*100:.1f}% spam probability)")
+                print(f"SPAM DETECTED! ({probability*100:.1f}% spam probability)")
             else:
-                print(f"✅ LEGITIMATE EMAIL ({probability*100:.1f}% spam probability)")
+                print(f"LEGITIMATE EMAIL ({probability*100:.1f}% spam probability)")
             print("-" * 70)
             print(f"Message: {text[:150]}{'...' if len(text) > 150 else ''}\n")
 
+            # Save to emails.py
+            save_to_inbox(text)
+
         except KeyboardInterrupt:
-            print("\n\n👋 Exiting...")
+            print("\n\nExiting...")
             break
         except Exception as e:
             print(f"Error: {e}")
 
 if __name__ == "__main__":
-    test_email_interactive(threshold=0.75)   # Change default threshold here if you want
+    test_email_interactive(threshold=0.8)

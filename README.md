@@ -21,7 +21,6 @@ Spam-Filter/
 ├── eda.py           ← exploratory data analysis
 ├── ml.py            ← machine learning models
 ├── sort_emails.py   ← sorts inbox into spam and legitimate
-├── testa_mail.py    ← tests individual emails
 ├── emails.py        ← add your own emails here
 └── modell.pkl       ← saved model (created after running main.py)
 
@@ -59,14 +58,6 @@ INBOX = [
     "Your email here",
     "Another email here",
 ]
-
----
-
-### Optional — Test individual emails
-
-python testa_mail.py
-
-This will run accuracy statistics on the emails in emails.py.
 
 ---
 

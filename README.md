@@ -5,6 +5,18 @@ The model classifies emails as spam or legitimate using Logistic Regression.
 
 ---
 
+
+## Preview
+
+
+![Preview 1](assets/spamfilter.png)
+
+
+![Preview 2](assets/sortedmails.png)
+
+
+
+
 ## Installation
 
 1. Clone the repository

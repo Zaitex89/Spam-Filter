@@ -52,7 +52,8 @@ This will:
 - Sort them into LEGITIMATE and SPAM
 - Print spam score for each email
 
-To add your own emails, open emails.py and add them to the INBOX list:
+To add your own emails, open emails.py and add them to the INBOX list,
+or you write in the interactive prompt you get after first run
 
 INBOX = [
     "Your email here",
